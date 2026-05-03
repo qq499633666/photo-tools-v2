@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片去水印工具 - 免费在线移除水印文字 - PhotoTools</title>
+    <meta name="description" content="免费在线图片去水印工具，智能填充技术，一键移除图片中的水印、文字、logo等不需要的内容。操作简单，效果自然，保留图片原有画质。">
+    <meta name="keywords" content="图片去水印,在线去水印,去除水印,移除水印,图片处理,去文字">
+    <meta name="author" content="PhotoTools">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://qq499633666.github.io/photo-tools-v2/tools/图片去水印/">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { background: white; border-radius: 20px; padding: 40px; max-width: 650px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #333; margin-bottom: 10px; font-size: 24px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; }
+        .back-home { display: inline-block; margin-bottom: 20px; color: #11998e; text-decoration: none; font-size: 14px; }
+        .back-home:hover { text-decoration: underline; }
+        .upload-area { border: 3px dashed #11998e; border-radius: 15px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.3s; background: #f8fff9; }
+        .upload-area:hover { border-color: #38ef7d; background: #f0fff4; }
+        .upload-area.dragover { background: #e8fff0; border-color: #38ef7d; }
+        .upload-icon { font-size: 60px; margin-bottom: 15px; }
+        .upload-text { color: #666; font-size: 16px; }
+        .upload-hint { color: #999; font-size: 12px; margin-top: 10px; }
+        input[type="file"] { display: none; }
+        .tools-panel { display: none; margin: 20px 0; padding: 20px; background: #f8fff9; border-radius: 15px; }
+        .tools-panel.show { display: block; }
+        .tools-panel h3 { color: #333; margin-bottom: 15px; font-size: 14px; }
+        .brush-sizes { display: flex; gap: 15px; justify-content: center; margin-bottom: 15px; }
+        .brush-btn { padding: 8px 16px; border: 2px solid #11998e; background: white; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-size: 12px; color: #11998e; }
+        .brush-btn:hover, .brush-btn.active { background: #11998e; color: white; }
+        .btn-row { display: flex; gap: 10px; }
+        .btn-secondary { flex: 1; padding: 12px; background: white; border: 2px solid #11998e; color: #11998e; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-secondary:hover { background: #f0fff4; }
+        .btn-primary { flex: 1; padding: 12px; background: #11998e; border: none; color: white; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-primary:hover { background: #0d7a6e; }
+        .canvas-container { display: none; margin-top: 20px; text-align: center; }
+        .canvas-container.show { display: block; }
+        .canvas-wrapper { position: relative; display: inline-block; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        #mainCanvas { display: block; max-width: 100%; cursor: crosshair; }
+        #overlayCanvas { position: absolute; top: 0; left: 0; pointer-events: none; }
+        .brush-cursor { position: absolute; border: 2px solid #11998e; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); display: none; }
+        .preview-container { display: none; margin-top: 30px; }
+        .preview-container.show { display: block; }
+        .preview-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .preview-box { text-align: center; }
+        .preview-box h3 { color: #333; margin-bottom: 10px; font-size: 14px; }
+        .preview-box canvas { max-width: 250px; max-height: 250px; border-radius: 10px; border: 2px solid #eee; }
+        .btn-download { display: block; width: 100%; padding: 15px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 20px; transition: transform 0.2s; }
+        .btn-download:hover { transform: translateY(-2px); }
+        .loading { display: none; text-align: center; padding: 20px; }
+        .loading.show { display: block; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #11998e; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .features { display: flex; justify-content: center; gap: 30px; margin: 25px 0; flex-wrap: wrap; }
+        .feature { text-align: center; }
+        .feature-icon { font-size: 24px; margin-bottom: 5px; }
+        .feature-text { font-size: 12px; color: #666; }
+        .note { margin-top: 20px; padding: 15px; background: #fff9e6; border-radius: 10px; font-size: 12px; color: #666; }
+        @media (max-width: 480px) {
+            .container { padding: 25px; }
+            .preview-row { flex-direction: column; align-items: center; }
+        }
+    </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-XXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <a href="../../index.html" class="back-home">← 返回首页</a>
+        <h1>🖼️ 图片去水印工具</h1>
+        <p class="subtitle">AI智能填充，一键去除图片水印/文字/杂物</p>
+
+        <div class="features">
+            <div class="feature"><div class="feature-icon">✨</div><div class="feature-text">智能填充</div></div>
+            <div class="feature"><div class="feature-icon">🎨</div><div class="feature-text">边缘自然</div></div>
+            <div class="feature"><div class="feature-icon">💾</div><div class="feature-text">免费下载</div></div>
+        </div>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <p class="upload-text">点击上传图片或拖拽到此处</p>
+            <p class="upload-hint">支持 JPG、PNG 格式</p>
+            <input type="file" id="fileInput" accept="image/jpeg,image/png">
+        </div>
+
+        <div class="tools-panel" id="toolsPanel">
+            <h3>🖌️ 涂抹要去除的区域（在水印/文字上涂抹）</h3>
+            <div class="brush-sizes">
+                <button class="brush-btn active" data-size="20">小</button>
+                <button class="brush-btn" data-size="40">中</button>
+                <button class="brush-btn" data-size="60">大</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn-secondary" id="undoBtn">↩️ 撤销</button>
+                <button class="btn-primary" id="removeBtn">✨ 开始去水印</button>
+            </div>
+        </div>
+
+        <div class="canvas-container" id="canvasContainer">
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <canvas id="mainCanvas"></canvas>
+                <canvas id="overlayCanvas"></canvas>
+                <div class="brush-cursor" id="brushCursor"></div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>AI正在处理中，请稍候...</p>
+        </div>
+
+        <div class="preview-container" id="previewContainer">
+            <div class="preview-row">
+                <div class="preview-box">
+                    <h3>📷 原图</h3>
+                    <canvas id="originalPreview"></canvas>
+                </div>
+                <div class="preview-box">
+                    <h3>✨ 去水印后</h3>
+                    <canvas id="resultPreview"></canvas>
+                </div>
+            </div>
+            <button class="btn-download" id="downloadBtn">💾 下载图片</button>
+        </div>
+
+        <div class="note">💡 <strong>使用技巧：</strong>用画笔涂抹在水印/文字区域上，覆盖要去除的内容。涂抹范围稍大一些效果更好。</div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const toolsPanel = document.getElementById('toolsPanel');
+        const canvasContainer = document.getElementById('canvasContainer');
+        const mainCanvas = document.getElementById('mainCanvas');
+        const overlayCanvas = document.getElementById('overlayCanvas');
+        const brushCursor = document.getElementById('brushCursor');
+        const loading = document.getElementById('loading');
+        const previewContainer = document.getElementById('previewContainer');
+        const originalPreview = document.getElementById('originalPreview');
+        const resultPreview = document.getElementById('resultPreview');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const brushBtns = document.querySelectorAll('.brush-btn');
+        const undoBtn = document.getElementById('undoBtn');
+        const removeBtn = document.getElementById('removeBtn');
+
+        const mainCtx = mainCanvas.getContext('2d');
+        const overlayCtx = overlayCanvas.getContext('2d');
+
+        let currentImage = null;
+        let brushSize = 20;
+        let isDrawing = false;
+        let maskData = null;
+        let history = [];
+        let originalImageData = null;
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) loadImage(file);
+        });
+        fileInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) loadImage(file);
+        });
+
+        brushBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                brushBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                brushSize = parseInt(btn.dataset.size);
+                updateBrushCursor();
+            });
+        });
+
+        function loadImage(file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = new Image();
+                img.onload = () => {
+                    currentImage = img;
+                    const maxW = 600;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxW) { h = (h / w) * maxW; w = maxW; }
+                    
+                    mainCanvas.width = w;
+                    mainCanvas.height = h;
+                    overlayCanvas.width = w;
+                    overlayCanvas.height = h;
+                    
+                    mainCtx.drawImage(img, 0, 0, w, h);
+                    originalImageData = mainCtx.getImageData(0, 0, w, h);
+                    history = [mainCtx.getImageData(0, 0, w, h)];
+                    maskData = new Uint8Array(w * h);
+                    
+                    uploadArea.style.display = 'none';
+                    toolsPanel.classList.add('show');
+                    canvasContainer.classList.add('show');
+                    updateBrushCursor();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateBrushCursor() {
+            brushCursor.style.width = brushSize + 'px';
+            brushCursor.style.height = brushSize + 'px';
+        }
+
+        const canvasWrapper = document.getElementById('canvasWrapper');
+        canvasWrapper.addEventListener('mousedown', e => { isDrawing = true; draw(e); });
+        canvasWrapper.addEventListener('mousemove', e => { if (isDrawing) draw(e); updateCursorPos(e); });
+        canvasWrapper.addEventListener('mouseup', () => isDrawing = false);
+        canvasWrapper.addEventListener('mouseleave', () => { isDrawing = false; brushCursor.style.display = 'none'; });
+        canvasWrapper.addEventListener('mouseenter', () => { brushCursor.style.display = 'block'; });
+
+        function updateCursorPos(e) {
+            const rect = canvasWrapper.getBoundingClientRect();
+            brushCursor.style.left = (e.clientX - rect.left) + 'px';
+            brushCursor.style.top = (e.clientY - rect.top) + 'px';
+        }
+
+        function draw(e) {
+            const rect = canvasWrapper.getBoundingClientRect();
+            const scaleX = mainCanvas.width / rect.width;
+            const scaleY = mainCanvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+            
+            overlayCtx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+            overlayCtx.beginPath();
+            overlayCtx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
+            overlayCtx.fill();
+            
+            mainCtx.fillStyle = 'rgba(0, 0, 0, 0)';
+            mainCtx.beginPath();
+            mainCtx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
+            mainCtx.fill();
+            
+            const imgData = mainCtx.getImageData(0, 0, mainCanvas.width, mainCanvas.height);
+            for (let py = Math.max(0, Math.floor(y - brushSize/2)); py < Math.min(mainCanvas.height, Math.ceil(y + brushSize/2)); py++) {
+                for (let px = Math.max(0, Math.floor(x - brushSize/2)); px < Math.min(mainCanvas.width, Math.ceil(x + brushSize/2)); px++) {
+                    const dx = px - x, dy = py - y;
+                    if (dx*dx + dy*dy <= (brushSize/2)*(brushSize/2)) {
+                        const idx = (py * mainCanvas.width + px) * 4;
+                        maskData[py * mainCanvas.width + px] = 1;
+                        imgData.data[idx] = 0;
+                        imgData.data[idx + 1] = 0;
+                        imgData.data[idx + 2] = 0;
+                        imgData.data[idx + 3] = 0;
+                    }
+                }
+            }
+            mainCtx.putImageData(imgData, 0, 0);
+        }
+
+        undoBtn.addEventListener('click', () => {
+            if (history.length > 1) {
+                history.pop();
+                const prev = history[history.length - 1];
+                mainCtx.putImageData(prev, 0, 0);
+                overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+            }
+        });
+
+        removeBtn.addEventListener('click', () => {
+            loading.classList.add('show');
+            setTimeout(() => {
+                const w = mainCanvas.width;
+                const h = mainCanvas.height;
+                const imgData = mainCtx.getImageData(0, 0, w, h);
+                
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        if (maskData[y * w + x] === 1) {
+                            fillPixel(imgData, x, y, w, h);
+                        }
+                    }
+                }
+                
+                mainCtx.putImageData(imgData, 0, 0);
+                history.push(mainCtx.getImageData(0, 0, w, h));
+                overlayCtx.clearRect(0, 0, w, h);
+                
+                loading.classList.remove('show');
+                
+                originalPreview.width = w;
+                originalPreview.height = h;
+                originalPreview.getContext('2d').putImageData(originalImageData, 0, 0);
+                
+                resultPreview.width = w;
+                resultPreview.height = h;
+                resultPreview.getContext('2d').putImageData(imgData, 0, 0);
+                
+                previewContainer.classList.add('show');
+            }, 100);
+        });
+
+        function fillPixel(imgData, x, y, w, h) {
+            const idx = (y * w + x) * 4;
+            let r = 0, g = 0, b = 0, cnt = 0;
+            
+            for (let dy = -5; dy <= 5; dy++) {
+                for (let dx = -5; dx <= 5; dx++) {
+                    const nx = x + dx, ny = y + dy;
+                    if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                        const nidx = (ny * w + nx) * 4;
+                        if (imgData.data[nidx + 3] !== 0) {
+                            r += imgData.data[nidx];
+                            g += imgData.data[nidx + 1];
+                            b += imgData.data[nidx + 2];
+                            cnt++;
+                        }
+                    }
+                }
+            }
+            
+            if (cnt > 0) {
+                imgData.data[idx] = r / cnt;
+                imgData.data[idx + 1] = g / cnt;
+                imgData.data[idx + 2] = b / cnt;
+                imgData.data[idx + 3] = 255;
+            }
+        }
+
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = '去水印_' + Date.now() + '.png';
+            link.href = mainCanvas.toDataURL('image/png');
+            link.click();
+        });
+    </script>
+</body>
+</html>

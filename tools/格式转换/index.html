@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片格式转换工具 - 免费在线JPG/PNG/WebP互转 - PhotoTools</title>
+    <meta name="description" content="免费在线图片格式转换工具，支持JPG、PNG、WebP、GIF等格式互转。简单快捷，高质量输出，无需下载安装，直接在浏览器中完成转换。">
+    <meta name="keywords" content="图片格式转换,在线格式转换,JPG转PNG,PNG转JPG,WebP转换,图片转换工具">
+    <meta name="author" content="PhotoTools">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://qq499633666.github.io/photo-tools-v2/tools/格式转换/">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { background: white; border-radius: 20px; padding: 40px; max-width: 600px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #333; margin-bottom: 10px; font-size: 24px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; }
+        .back-home { display: inline-block; margin-bottom: 20px; color: #00f2fe; text-decoration: none; font-size: 14px; }
+        .back-home:hover { text-decoration: underline; }
+        .upload-area { border: 3px dashed #4facfe; border-radius: 15px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.3s; background: #f0faff; }
+        .upload-area:hover { border-color: #00f2fe; background: #f5fffe; }
+        .upload-area.dragover { background: #e0f8ff; border-color: #00f2fe; }
+        .upload-icon { font-size: 60px; margin-bottom: 15px; }
+        .upload-text { color: #666; font-size: 16px; }
+        .upload-hint { color: #999; font-size: 12px; margin-top: 10px; }
+        input[type="file"] { display: none; }
+        .options { display: none; margin: 25px 0; padding: 20px; background: #f0faff; border-radius: 15px; }
+        .options.show { display: block; }
+        .option-group { margin-bottom: 20px; }
+        .option-group:last-child { margin-bottom: 0; }
+        .option-label { display: block; color: #333; font-weight: 600; margin-bottom: 15px; font-size: 14px; text-align: center; }
+        .format-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .format-btn { padding: 15px 10px; border: 2px solid #4facfe; background: white; border-radius: 10px; cursor: pointer; font-size: 14px; color: #4facfe; transition: all 0.2s; font-weight: 600; }
+        .format-btn:hover, .format-btn.active { background: #4facfe; color: white; }
+        .btn { display: block; width: 100%; padding: 15px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 20px; transition: transform 0.2s; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .preview-container { display: none; margin-top: 30px; }
+        .preview-container.show { display: block; }
+        .preview-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .preview-box { text-align: center; flex: 1; min-width: 120px; }
+        .preview-box h3 { color: #333; margin-bottom: 10px; font-size: 14px; }
+        .preview-box canvas { max-width: 200px; max-height: 200px; border-radius: 10px; border: 2px solid #eee; }
+        .format-badge { display: inline-block; padding: 5px 15px; background: #4facfe; color: white; border-radius: 20px; font-size: 12px; font-weight: bold; margin-top: 10px; }
+        .loading { display: none; text-align: center; padding: 20px; }
+        .loading.show { display: block; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #4facfe; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .features { display: flex; justify-content: center; gap: 30px; margin: 25px 0; flex-wrap: wrap; }
+        .feature { text-align: center; }
+        .feature-icon { font-size: 24px; margin-bottom: 5px; }
+        .feature-text { font-size: 12px; color: #666; }
+        @media (max-width: 480px) {
+            .container { padding: 25px; }
+            .format-grid { grid-template-columns: repeat(2, 1fr); }
+            .preview-row { flex-direction: column; align-items: center; }
+        }
+    </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-XXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <a href="../../index.html" class="back-home">← 返回首页</a>
+        <h1>🔄 图片格式转换工具</h1>
+        <p class="subtitle">支持多种格式，轻松转换</p>
+
+        <div class="features">
+            <div class="feature"><div class="feature-icon">📊</div><div class="feature-text">高质量</div></div>
+            <div class="feature"><div class="feature-icon">⚡</div><div class="feature-text">快速转换</div></div>
+            <div class="feature"><div class="feature-icon">🛡️</div><div class="feature-text">安全可靠</div></div>
+        </div>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <p class="upload-text">点击上传图片或拖拽图片到这里</p>
+            <p class="upload-hint">支持 JPG、PNG、WebP、GIF 格式</p>
+            <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif">
+        </div>
+
+        <div class="options" id="options">
+            <div class="option-group">
+                <label class="option-label">选择目标格式：</label>
+                <div class="format-grid">
+                    <button class="format-btn" data-format="jpeg">JPG</button>
+                    <button class="format-btn active" data-format="png">PNG</button>
+                    <button class="format-btn" data-format="webp">WebP</button>
+                    <button class="format-btn" data-format="gif">GIF</button>
+                </div>
+            </div>
+            <button class="btn" id="convertBtn">🔄 开始转换</button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>正在转换中，请稍候...</p>
+        </div>
+
+        <div class="preview-container" id="previewContainer">
+            <div class="preview-row">
+                <div class="preview-box">
+                    <h3>📷 原图</h3>
+                    <canvas id="originalCanvas"></canvas>
+                    <div class="format-badge" id="originalFormat">-</div>
+                </div>
+                <div class="preview-box">
+                    <h3>✨ 转换后</h3>
+                    <canvas id="resultCanvas"></canvas>
+                    <div class="format-badge" id="resultFormat">-</div>
+                </div>
+            </div>
+            <button class="btn" id="downloadBtn">💾 下载图片</button>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const options = document.getElementById('options');
+        const loading = document.getElementById('loading');
+        const previewContainer = document.getElementById('previewContainer');
+        const originalCanvas = document.getElementById('originalCanvas');
+        const resultCanvas = document.getElementById('resultCanvas');
+        const convertBtn = document.getElementById('convertBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const formatBtns = document.querySelectorAll('.format-btn');
+        const originalFormat = document.getElementById('originalFormat');
+        const resultFormat = document.getElementById('resultFormat');
+
+        let currentFile = null;
+        let currentImage = null;
+        let targetFormat = 'png';
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) handleFile(file);
+        });
+        fileInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) handleFile(file);
+        });
+
+        formatBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                formatBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                targetFormat = btn.dataset.format;
+            });
+        });
+
+        function handleFile(file) {
+            currentFile = file;
+            const ext = file.name.split('.').pop().toUpperCase();
+            originalFormat.textContent = ext;
+            
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = new Image();
+                img.onload = () => {
+                    currentImage = img;
+                    uploadArea.style.display = 'none';
+                    options.classList.add('show');
+                    
+                    const maxSize = 500;
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > maxSize || height > maxSize) {
+                        if (width > height) {
+                            height = (height / width) * maxSize;
+                            width = maxSize;
+                        } else {
+                            width = (width / height) * maxSize;
+                            height = maxSize;
+                        }
+                    }
+                    
+                    originalCanvas.width = width;
+                    originalCanvas.height = height;
+                    const ctx = originalCanvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function convertImage() {
+            if (!currentImage) return;
+            loading.classList.add('show');
+            previewContainer.classList.remove('show');
+
+            setTimeout(() => {
+                const mimeType = targetFormat === 'gif' ? 'image/gif' : 'image/' + targetFormat;
+                resultFormat.textContent = targetFormat.toUpperCase();
+                
+                resultCanvas.width = originalCanvas.width;
+                resultCanvas.height = originalCanvas.height;
+                const ctx = resultCanvas.getContext('2d');
+                ctx.drawImage(currentImage, 0, 0, originalCanvas.width, originalCanvas.height);
+                
+                loading.classList.remove('show');
+                previewContainer.classList.add('show');
+                downloadBtn.dataset.mimeType = mimeType;
+                downloadBtn.dataset.filename = 'converted_' + Date.now() + '.' + targetFormat;
+            }, 100);
+        }
+
+        convertBtn.addEventListener('click', convertImage);
+
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = downloadBtn.dataset.filename;
+            link.href = resultCanvas.toDataURL(downloadBtn.dataset.mimeType);
+            link.click();
+        });
+    </script>
+</body>
+</html>

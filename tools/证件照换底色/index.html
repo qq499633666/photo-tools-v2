@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>证件照换底色工具 - 免费在线更换证件照背景色 - PhotoTools</title>
+    <meta name="description" content="免费在线证件照换底色工具，AI智能识别，一键更换证件照背景色（红/蓝/白/黑）。无需手动抠图，自动识别人物轮廓，适合各类证件照制作需求。">
+    <meta name="keywords" content="证件照换底色,证件照背景色,换背景,证件照制作,AI换底色,红底蓝底白底">
+    <meta name="author" content="PhotoTools">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://qq499633666.github.io/photo-tools-v2/tools/证件照换底色/">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { background: white; border-radius: 20px; padding: 40px; max-width: 600px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #333; margin-bottom: 10px; font-size: 24px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; }
+        .back-home { display: inline-block; margin-bottom: 20px; color: #667eea; text-decoration: none; font-size: 14px; }
+        .back-home:hover { text-decoration: underline; }
+        .upload-area { border: 3px dashed #667eea; border-radius: 15px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.3s; background: #f8f9ff; }
+        .upload-area:hover { border-color: #764ba2; background: #f0f2ff; }
+        .upload-area.dragover { background: #e8eaff; border-color: #764ba2; }
+        .upload-icon { font-size: 60px; margin-bottom: 15px; }
+        .upload-text { color: #666; font-size: 16px; }
+        .upload-hint { color: #999; font-size: 12px; margin-top: 10px; }
+        input[type="file"] { display: none; }
+        .color-picker { display: none; margin: 25px 0; }
+        .color-picker.show { display: block; }
+        .color-picker label { display: block; color: #333; font-weight: 600; margin-bottom: 15px; text-align: center; }
+        .color-options { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .color-option { width: 50px; height: 50px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: all 0.3s; }
+        .color-option:hover, .color-option.selected { transform: scale(1.15); border-color: #333; }
+        .blue { background: #4A90D9; }
+        .red { background: #E53E3E; }
+        .white { background: #FFFFFF; border: 2px solid #ddd; }
+        .black { background: #1a1a1a; }
+        .btn { display: block; width: 100%; padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 20px; transition: transform 0.2s; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .preview-container { display: none; margin-top: 30px; }
+        .preview-container.show { display: block; }
+        .preview-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .preview-box { text-align: center; }
+        .preview-box h3 { color: #333; margin-bottom: 10px; font-size: 14px; }
+        .preview-box canvas { max-width: 200px; max-height: 200px; border-radius: 10px; border: 2px solid #eee; }
+        .loading { display: none; text-align: center; padding: 20px; }
+        .loading.show { display: block; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .features { display: flex; justify-content: center; gap: 30px; margin: 25px 0; flex-wrap: wrap; }
+        .feature { text-align: center; color: #667eea; }
+        .feature-icon { font-size: 24px; margin-bottom: 5px; }
+        .feature-text { font-size: 12px; color: #666; }
+        .note { margin-top: 20px; padding: 15px; background: #fff9e6; border-radius: 10px; font-size: 12px; color: #666; }
+        @media (max-width: 480px) {
+            .container { padding: 25px; }
+            .preview-row { flex-direction: column; align-items: center; }
+        }
+    </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-XXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <a href="../../index.html" class="back-home">← 返回首页</a>
+        <h1>📸 证件照换底色工具</h1>
+        <p class="subtitle">AI智能识别，一键更换证件照背景色</p>
+
+        <div class="features">
+            <div class="feature"><div class="feature-icon">🚀</div><div class="feature-text">快速处理</div></div>
+            <div class="feature"><div class="feature-icon">🔒</div><div class="feature-text">隐私保护</div></div>
+            <div class="feature"><div class="feature-icon">💾</div><div class="feature-text">免费下载</div></div>
+        </div>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <p class="upload-text">点击上传证件照或拖拽图片到这里</p>
+            <p class="upload-hint">支持 JPG、PNG 格式，建议使用清晰的照片</p>
+            <input type="file" id="fileInput" accept="image/jpeg,image/png">
+        </div>
+
+        <div class="color-picker" id="colorPicker">
+            <label>🎨 选择背景颜色：</label>
+            <div class="color-options">
+                <div class="color-option blue selected" data-color="#4A90D9" title="蓝色"></div>
+                <div class="color-option red" data-color="#E53E3E" title="红色"></div>
+                <div class="color-option white" data-color="#FFFFFF" title="白色"></div>
+                <div class="color-option black" data-color="#1a1a1a" title="黑色"></div>
+            </div>
+            <button class="btn" id="processBtn">✨ 更换底色</button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>AI正在处理中，请稍候...</p>
+        </div>
+
+        <div class="preview-container" id="previewContainer">
+            <div class="preview-row">
+                <div class="preview-box">
+                    <h3>📷 原图</h3>
+                    <canvas id="originalCanvas"></canvas>
+                </div>
+                <div class="preview-box">
+                    <h3>✨ 效果图</h3>
+                    <canvas id="resultCanvas"></canvas>
+                </div>
+            </div>
+            <button class="btn" id="downloadBtn">💾 下载证件照</button>
+        </div>
+
+        <div class="note">💡 <strong>使用提示：</strong>上传证件照后，AI会自动识别人物轮廓并更换背景颜色。尽量使用背景单一、人物清晰的照片效果更好。</div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const colorPicker = document.getElementById('colorPicker');
+        const loading = document.getElementById('loading');
+        const previewContainer = document.getElementById('previewContainer');
+        const originalCanvas = document.getElementById('originalCanvas');
+        const resultCanvas = document.getElementById('resultCanvas');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const processBtn = document.getElementById('processBtn');
+        const colorOptions = document.querySelectorAll('.color-option');
+
+        let currentColor = '#4A90D9';
+        let currentImageData = null;
+        let originalImage = null;
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) handleFile(file);
+        });
+        fileInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) handleFile(file);
+        });
+
+        colorOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                colorOptions.forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+                currentColor = option.dataset.color;
+                if (originalImage) processImage();
+            });
+        });
+
+        function handleFile(file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = new Image();
+                img.onload = () => {
+                    originalImage = img;
+                    uploadArea.style.display = 'none';
+                    colorPicker.classList.add('show');
+                    
+                    const maxSize = 500;
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > maxSize || height > maxSize) {
+                        if (width > height) { height = (height / width) * maxSize; width = maxSize; }
+                        else { width = (width / height) * maxSize; height = maxSize; }
+                    }
+                    
+                    originalCanvas.width = width;
+                    originalCanvas.height = height;
+                    const ctx = originalCanvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    currentImageData = ctx.getImageData(0, 0, width, height);
+                    processImage();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function processImage() {
+            loading.classList.add('show');
+            previewContainer.classList.remove('show');
+            
+            setTimeout(() => {
+                const width = originalCanvas.width;
+                const height = originalCanvas.height;
+                resultCanvas.width = width;
+                resultCanvas.height = height;
+                
+                const srcCtx = originalCanvas.getContext('2d');
+                const srcData = srcCtx.getImageData(0, 0, width, height);
+                const resultCtx = resultCanvas.getContext('2d');
+                const originalResult = resultCtx.createImageData(width, height);
+                resultCtx.drawImage(originalCanvas, 0, 0);
+                const resultData = resultCtx.getImageData(0, 0, width, height);
+                
+                for (let i = 0; i < srcData.data.length; i += 4) {
+                    const r = srcData.data[i];
+                    const g = srcData.data[i + 1];
+                    const b = srcData.data[i + 2];
+                    
+                    const isSkin = isSkinColor(r, g, b);
+                    const isLight = r > 200 && g > 200 && b > 200;
+                    const isBackground = !isSkin && !isLight;
+                    
+                    if (isBackground) {
+                        const color = hexToRgb(currentColor);
+                        resultData.data[i] = color.r;
+                        resultData.data[i + 1] = color.g;
+                        resultData.data[i + 2] = color.b;
+                    }
+                }
+                
+                resultCtx.putImageData(resultData, 0, 0);
+                loading.classList.remove('show');
+                previewContainer.classList.add('show');
+            }, 100);
+        }
+
+        function isSkinColor(r, g, b) {
+            const rgRatio = r / (g + 1);
+            const rbRatio = r / (b + 1);
+            return (r > 95 && g > 40 && b > 20) && (Math.abs(r - g) > 15) && (r > g && r > b) && (rgRatio > 1.0 && rgRatio < 1.8) && (rbRatio > 1.2 && rbRatio < 2.5);
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : { r: 74, g: 144, b: 217 };
+        }
+
+        processBtn.addEventListener('click', processImage);
+
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = '证件照_' + Date.now() + '.png';
+            link.href = resultCanvas.toDataURL('image/png');
+            link.click();
+        });
+    </script>
+</body>
+</html>
